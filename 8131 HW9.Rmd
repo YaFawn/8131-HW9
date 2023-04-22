@@ -1,0 +1,34 @@
+---
+title: "8131 HW9"
+output: html_document
+date: "2023-04-22"
+---
+```{r}
+library(dplyr)
+```
+
+# problem3
+```{r}
+library(KMsurv)
+library(survival)
+data(tongue)
+```
+
+```{r}
+# km_aneuploid
+aneuploid = tongue %>% filter(type == 1) %>% mutate(survt = Surv(time, delta, type = "right"))
+KM_aneuploid = survfit(Surv(time, delta) ~ 1, data = aneuploid, conf.type = "log")
+plot(KM_aneuploid, conf.int = TRUE, mark.time = TRUE, xlab = "Weeks", ylab = "Survival Probability", main = "aneuploid tumor KM curve", cex.lab = 1.5, cex.main = 1.5)
+```
+
+```{r}
+# km_diploid
+diploid = tongue %>% filter(type == 2) %>% mutate(survt = Surv(time, delta, type = "right"))
+KM_diploid = survfit(Surv(time, delta) ~ 1, data = diploid, conf.type = "log")
+plot(KM_diploid, conf.int = TRUE, mark.time = TRUE, xlab = "Weeks", ylab = "Survival Probability", main = "diploid tumor KM curve", cex.lab = 1.5, cex.main = 1.5)
+```
+
+```{r}
+summary(KM_aneuploid, time = c(52))
+summary(KM_diploid, time = c(52))
+```
